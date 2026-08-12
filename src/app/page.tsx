@@ -1,32 +1,19 @@
+import { ingest } from "@/core/rag/ingest/ingest";
 import { Suspense } from "react";
 
 async function fetchDoc() {
-  const DOC_URL = "https://react.dev/learn/thinking-in-react";
-
-  const response = await fetch(DOC_URL, {
-    signal: AbortSignal.timeout(10_000),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch doc: ${response.status}`);
-  }
-
-  return response.text();
+  // const DOC_URL = "https://react.dev/learn/thinking-in-react";
+  const DOC_URL =
+    "https://www.epicweb.dev/4-practical-ways-to-speed-up-your-loaders-in-react-router-v7-9z8as";
+  return ingest(DOC_URL, "html-url");
 }
 
 async function DocContent() {
   let shortenContent = null;
   try {
-    const html = await fetchDoc();
-    // Removes HTML tags and reduces multiple spaces to just one space
-    const stripData = html
-      .replace(/<script[\s\S]*?<\/script>/gi, "") // remove scripts
-      .replace(/<style[\s\S]*?<\/style>/gi, "") // remove styles
-      .replace(/<[^>]+>/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
+    const { pageContent } = await fetchDoc();
 
-    shortenContent = stripData.slice(0, 500);
+    shortenContent = pageContent;
     console.log("data123\n");
     console.log(JSON.stringify(shortenContent));
   } catch {
