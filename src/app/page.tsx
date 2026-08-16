@@ -1,19 +1,24 @@
+import { RagWorkspace } from "@/components/rag/rag-workspace";
+import { splitDocument } from "@/core/rag/chunk";
 import { ingest } from "@/core/rag/ingest/ingest";
+import { saveDocuments } from "@/core/rag/vectorStore";
 import { Suspense } from "react";
 
 async function fetchDoc() {
   // const DOC_URL = "https://react.dev/learn/thinking-in-react";
   const DOC_URL =
     "https://www.epicweb.dev/4-practical-ways-to-speed-up-your-loaders-in-react-router-v7-9z8as";
-  return ingest(DOC_URL, "html-url");
+  return ingest(DOC_URL, "html");
 }
 
 async function DocContent() {
   let shortenContent = null;
   try {
-    const { pageContent } = await fetchDoc();
+    const document = await fetchDoc();
+    const splits = await splitDocument(document);
+    await saveDocuments(splits);
 
-    shortenContent = pageContent;
+    shortenContent = splits;
     console.log("data123\n");
     console.log(JSON.stringify(shortenContent));
   } catch {
@@ -36,7 +41,7 @@ export default function Home() {
             ASK MY-DOCS
           </h1>
           <Suspense fallback={<p>Loading document...</p>}>
-            <DocContent />
+            <RagWorkspace />
           </Suspense>
         </div>
       </main>
