@@ -1,5 +1,6 @@
-import type { Loader } from "./types";
-import { convert } from "html-to-text";
+import { load } from "cheerio";
+
+import type { Loader } from "../../types";
 
 export const loadHtml: Loader = async (source) => {
   const response = await fetch(source, {
@@ -12,28 +13,17 @@ export const loadHtml: Loader = async (source) => {
 
   const html = await response.text();
 
-  // Removes HTML tags
-  // const text = html
-  //   .replace(/<script[\s\S]*?<\/script>/gi, "")
-  //   .replace(/<style[\s\S]*?<\/style>/gi, "")
-  //   .replace(/<[^>]+>/g, " ");
+  const $ = load(html);
+  $("meta, link, script, style, noscript, nav, footer").remove();
 
-  const stripData = convert(html, {
-    wordwrap: false,
-    preserveNewlines: false,
-    selectors: [
-      { selector: "a", options: { ignoreHref: true } }, // Ignora os links literais (ex: [http://...]) para poupar tokens
-      { selector: "img", format: "skip" }, // Ignora imagens
-      { selector: "nav", format: "skip" }, // TENTA IGNORAR O MENU DE NAVEGAÇÃO
-      { selector: "footer", format: "skip" }, // Ignora o rodapé
-    ],
-  });
+  // Extract clean text content
+  const cleanText = $("body").text().trim();
 
   return {
-    text: stripData,
+    pageContent: cleanText,
     metadata: {
       source,
-      format: "html-url",
+      format: "html",
       fetchedAt: new Date().toISOString(),
     },
   };
