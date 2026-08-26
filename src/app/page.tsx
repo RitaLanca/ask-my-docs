@@ -11,27 +11,6 @@ async function fetchDoc() {
   return ingest(DOC_URL, "html");
 }
 
-async function DocContent() {
-  let shortenContent = null;
-  try {
-    const document = await fetchDoc();
-    const splits = await splitDocument(document);
-    await saveDocuments(splits);
-
-    shortenContent = splits;
-    console.log("data123\n");
-    console.log(JSON.stringify(shortenContent));
-  } catch {
-    console.error("error");
-  }
-
-  if (!shortenContent) {
-    return <p>Could not load document</p>;
-  }
-
-  return <p>{shortenContent.length} characters fetched.</p>;
-}
-
 export default function Home() {
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
