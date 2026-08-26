@@ -4,6 +4,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../components/ui/tabs";
+import { ChatPanel } from "./chat-panel";
 import { UploadPanel } from "./upload-panel";
 
 export const RagWorkspace = () => {
@@ -21,7 +22,7 @@ export const RagWorkspace = () => {
         <UploadPanel />
       </TabsContent>
       <TabsContent id="retrieve-panel" value="retrieve">
-        Change your password here.
+        <ChatPanel />
       </TabsContent>
     </Tabs>
   );
