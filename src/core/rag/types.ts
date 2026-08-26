@@ -7,3 +7,5 @@ export type DocMetadata = {
 export type Document = { pageContent: string; metadata: DocMetadata };
 
 export type Loader = (source: string) => Promise<Document>;
+
+export type RetrievedChunk = Document;
