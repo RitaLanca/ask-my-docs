@@ -33,7 +33,7 @@ export const ChatPanel = () => {
         <CardTitle>Expôe a tua duvida</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
-        <form className="flex flex-col gap-6" action={formAction}>
+        <form className="flex flex-col gap-6 h-140" action={formAction}>
           <MessageScrollerProvider>
             <MessageScroller>
               <MessageScrollerViewport>
@@ -47,8 +47,14 @@ export const ChatPanel = () => {
                       <Message
                         align={message.role === "user" ? "end" : "start"}
                       >
-                        <MessageAvatar>
-                          {message.role === "user" ? "Tu" : "IA"}
+                        <MessageAvatar
+                          className={`px-3 py-2 ${
+                            message.role === "user"
+                              ? "bg-amber-400"
+                              : "bg-cyan-600"
+                          }`}
+                        >
+                          {message.role === "user" ? "RL" : "IA"}
                         </MessageAvatar>
                         <MessageContent>{message.content}</MessageContent>
                       </Message>
