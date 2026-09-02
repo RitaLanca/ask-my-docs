@@ -20,26 +20,24 @@ export const saveDocuments = async (
 export async function retrieve(
   question: string,
   k = 3,
-  minScore = 0.75,
 ): Promise<RetrievedChunk[]> {
-  const results = await vectorStore.similaritySearchWithScore(question, k);
+  // const results = await vectorStore.similaritySearchWithScore(question, k);
+  const results = await vectorStore.similaritySearch(question, k);
 
-  console.log(`\n[RESULT] Vector DB returned ${results.length} candidates.`);
+  // console.log(`\n[RESULT] Vector DB returned ${results.length} candidates.`);
 
-  results.forEach(([doc, score], i) => {
-    console.log(`\n--- CHUNK #${i + 1} (score: ${score}) ---`);
-    console.log(`Origem (Metadata):`, doc.metadata.source);
-    console.log(`Conteúdo:`, doc.pageContent);
-  });
+  // results.forEach(([doc, score], i) => {
+  //   console.log(`\n--- CHUNK #${i + 1} (score: ${score}) ---`);
+  //   console.log(`Origem (Metadata):`, doc.metadata.source);
+  //   console.log(`Conteúdo:`, doc.pageContent);
+  // });
 
-  return results
-    .filter(([, score]) => score >= minScore)
-    .map(([doc]) => ({
-      pageContent: doc.pageContent,
-      metadata: {
-        source: doc.metadata?.source,
-        format: doc.metadata?.format,
-        fetchedAt: doc.metadata?.fetchedAt,
-      },
-    }));
+  return results.map((doc) => ({
+    pageContent: doc.pageContent,
+    metadata: {
+      source: doc.metadata?.source,
+      format: doc.metadata?.format,
+      fetchedAt: doc.metadata?.fetchedAt,
+    },
+  }));
 }

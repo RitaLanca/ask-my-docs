@@ -5,8 +5,8 @@ import { Document, DocMetadata } from "./types";
 
 export const splitDocument = async (document: Document) => {
   const splitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 500,
-    chunkOverlap: 50,
+    chunkSize: 1000,
+    chunkOverlap: 150,
   });
 
   const docSplits = await splitter.splitDocuments([document]);
